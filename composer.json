@@ -1,0 +1,69 @@
+{
+    "name": "novius/laravel-linkable",
+    "description": "A Laravel Eloquent model trait for linkable resource",
+    "keywords": [
+        "laravel",
+        "IsLinkable",
+        "url",
+        "eloquent"
+    ],
+    "license": "AGPL-3.0-or-later",
+    "homepage": "https://github.com/novius/laravel-linkable",
+    "type": "library",
+    "support": {
+        "issues": "https://github.com/novius/laravel-linkable/issues",
+        "source": "https://github.com/novius/laravel-linkable"
+    },
+    "authors": [
+        {
+            "name": "Novius Agency",
+            "email": "team-developpeurs@novius.com",
+            "homepage": "https://www.novius.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "laravel/framework": "^10.0|^11.0",
+        "illuminate/database": "^10.0|^11.0"
+    },
+    "require-dev": {
+        "laravel/nova": "^4.0",
+        "laravel/pint": "^1.7",
+        "orchestra/testbench": "^9.0",
+        "pestphp/pest": "^2.34.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novius\\LaravelLinkable\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Novius\\LaravelLinkable\\Tests\\": "tests"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
+    "scripts": {
+        "test": "vendor/bin/pest --colors=always",
+        "cs-fix": "./vendor/bin/pint -v",
+        "lint": "@composer cs-fix -- --test"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Novius\\LaravelLinkable\\LaravelLinkableServiceProvider"
+            ]
+        }
+    }
+}
