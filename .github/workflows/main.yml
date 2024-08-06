@@ -28,8 +28,8 @@ jobs:
     - name: Add Nova key
       run: composer config http-basic.nova.laravel.com $LARAVEL_NOVA_USERNAME $LARAVEL_NOVA_LICENSE_KEY
       env:
-        LARAVEL_NOVA_USERNAME: ${{ secret.LARAVEL_NOVA_USERNAME }}
-        LARAVEL_NOVA_LICENSE_KEY: ${{ secret.LARAVEL_NOVA_LICENSE_KEY }}
+        LARAVEL_NOVA_USERNAME: ${{ secrets.LARAVEL_NOVA_USERNAME }}
+        LARAVEL_NOVA_LICENSE_KEY: ${{ secrets.LARAVEL_NOVA_LICENSE_KEY }}
 
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -62,8 +62,8 @@ jobs:
       - name: Add Nova key
         run: composer config http-basic.nova.laravel.com $LARAVEL_NOVA_USERNAME $LARAVEL_NOVA_LICENSE_KEY
         env:
-          LARAVEL_NOVA_USERNAME: ${{ secret.LARAVEL_NOVA_USERNAME }}
-          LARAVEL_NOVA_LICENSE_KEY: ${{ secret.LARAVEL_NOVA_LICENSE_KEY }}
+          LARAVEL_NOVA_USERNAME: ${{ secrets.LARAVEL_NOVA_USERNAME }}
+          LARAVEL_NOVA_LICENSE_KEY: ${{ secrets.LARAVEL_NOVA_LICENSE_KEY }}
 
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
