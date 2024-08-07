@@ -12,7 +12,7 @@ class LaravelLinkableServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->publishes([__DIR__.'/../config' => config_path('laravel-linkable.php')]);
+        $this->publishes([__DIR__.'/../config/laravel-linkable.php' => config_path('laravel-linkable.php')], 'config');
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'laravel-linkable');
         $this->publishes([__DIR__.'/../lang' => lang_path('vendor/laravel-linkable')], 'lang');

@@ -66,7 +66,7 @@ trait Linkable
             return $this->resolveRouteBindingQuery($this, $value, $field)->first();
         }
 
-        $guard = config('laravel-nova-page-manager.guard_preview');
+        $guard = config('laravel-linkable.guard_preview');
         /** @var Model|Builder $query */
         $query = $this->newQuery();
         if ($this->linkableConfig()->resolveQuery) {
