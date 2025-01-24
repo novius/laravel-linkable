@@ -23,6 +23,6 @@ return [
      */
 
     'linkable_models' => [
-        //App\Models\Page::class,
+        // App\Models\Page::class,
     ],
 ];
