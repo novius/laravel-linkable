@@ -85,7 +85,7 @@ class LinkableService
                 /** @var Model&Linkable $item */
                 $item = $className::find($infos[1]);
 
-                return $item->url();
+                return $item?->url();
             }
         }
 
