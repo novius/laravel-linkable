@@ -148,6 +148,11 @@ return [
     'linkable_models' => [
         Provider\Package\Models\Model::class,
     ],
+
+    /*
+     * Enable this if your site use multiple locales and Laravel Localization package
+     */
+    'use_localization' => false,
 ];
 ```
 

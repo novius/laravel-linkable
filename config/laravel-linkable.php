@@ -25,4 +25,9 @@ return [
     'linkable_models' => [
         // App\Models\Page::class,
     ],
+
+    /*
+     * Enable this if your site use multiple locales and Laravel Localization package
+     */
+    'use_localization' => false,
 ];

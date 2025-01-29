@@ -29,6 +29,8 @@
     "require-dev": {
         "laravel/nova": "^4.0",
         "laravel/pint": "^1.7",
+        "mcamara/laravel-localization": "^2.2",
+        "novius/laravel-translatable": "^1.0.0",
         "orchestra/testbench": "^9.0",
         "pestphp/pest": "^2.34.9"
     },

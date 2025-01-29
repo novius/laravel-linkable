@@ -42,7 +42,7 @@ class LinkableService
         $this->routes = $this->routes->merge($routes);
     }
 
-    public function links(array $classes = []): Collection
+    public function links(array $classes = [], ?string $locale = null): Collection
     {
         $links = collect();
         foreach ($this->models as $class) {
@@ -50,7 +50,7 @@ class LinkableService
                 in_array(Linkable::class, class_uses_recursive($class), true)
             ) {
                 /** @var Linkable $class */
-                $links = $links->merge($class::linkableItems());
+                $links = $links->merge($class::linkableItems($locale));
             }
         }
 
