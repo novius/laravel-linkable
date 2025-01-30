@@ -3,6 +3,7 @@
 namespace Novius\LaravelLinkable\Nova\Fields;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Nova\Fields\FormData;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Novius\LaravelLinkable\Facades\Linkable as LinkableFacade;
@@ -19,19 +20,7 @@ class Linkable extends Select
     ) {
         parent::__construct($name, $attribute, $resolveCallback);
 
-        $this->searchable();
-        $this->displayUsingLabels();
-        $this->options(function () {
-            $locale = null;
-            if (class_exists('Laravel\Nova\Http\Requests\NovaRequest') && config('laravel-linkable.use_localization', false)) {
-                $novaRequest = app(NovaRequest::class);
-                $model = $novaRequest->findResourceOrFail()->resource;
-                if (in_array('Novius\LaravelTranslatable\Traits\Translatable', class_uses_recursive($model), true)) {
-                    /** @var Model&Translatable $model */
-                    $locale = $model->{$model->getLocaleColumn()};
-                }
-            }
-
+        $optionCallback = function ($locale) {
             return LinkableFacade::links($this->optionsClasses, $locale)
                 ->sortBy('label')
                 ->sortBy('group')
@@ -40,6 +29,36 @@ class Linkable extends Select
                         'label' => $item['label'], 'group' => $item['group'],
                     ],
                 ]);
+        };
+
+        if (config('laravel-linkable.use_localization', false)) {
+            $novaRequest = app(NovaRequest::class);
+            $model = $novaRequest->findResource()->model();
+            if ($model && in_array('Novius\LaravelTranslatable\Traits\Translatable', class_uses_recursive($model), true)) {
+                /** @var Model&Translatable $model */
+                $this->dependsOn(
+                    [$model->getLocaleColumn()],
+                    function (Linkable $field, NovaRequest $request, FormData $formData) use ($optionCallback, $model) {
+                        $field->options($optionCallback($formData->string($model->getLocaleColumn())));
+                    }
+                );
+            }
+        }
+
+        $this->searchable();
+        $this->displayUsingLabels();
+        $this->options(function () use ($optionCallback) {
+            $locale = null;
+            if (config('laravel-linkable.use_localization', false)) {
+                $novaRequest = app(NovaRequest::class);
+                $model = $novaRequest->findResource()->resource;
+                if ($model && in_array('Novius\LaravelTranslatable\Traits\Translatable', class_uses_recursive($model), true)) {
+                    /** @var Model&Translatable $model */
+                    $locale = $model->{$model->getLocaleColumn()};
+                }
+            }
+
+            return $optionCallback($locale);
         });
     }
 
