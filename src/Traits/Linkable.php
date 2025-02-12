@@ -116,7 +116,7 @@ trait Linkable
         }
 
         $query = $config->optionsQuery ? call_user_func($config->optionsQuery, static::query()) : static::query();
-        if (config('laravel-linkable.use_localization', false) &&
+        if ($locale && config('laravel-linkable.use_localization', false) &&
             in_array(Translatable::class, class_uses_recursive(__CLASS__), true)) {
             $query->withLocale($locale);
         }
