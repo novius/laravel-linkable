@@ -49,7 +49,8 @@ class LinkableService
             if ((empty($classes) || in_array($class, $classes, true)) &&
                 in_array(Linkable::class, class_uses_recursive($class), true)
             ) {
-                /** @var Linkable $class */
+                /** @var Model|Linkable $class */
+                /** @phpstan-ignore class.notFound */
                 $links = $links->merge($class::linkableItems($locale));
             }
         }
@@ -82,9 +83,10 @@ class LinkableService
             $className = $infos[0];
 
             if (in_array(Linkable::class, class_uses_recursive($className), true)) {
-                /** @var Model&Linkable $item */
+                /** @var Model&Linkable|null $item */
                 $item = $className::find($infos[1]);
 
+                /** @phpstan-ignore method.notFound */
                 return $item?->url();
             }
         }

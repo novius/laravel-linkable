@@ -11,7 +11,11 @@ use Novius\LaravelTranslatable\Traits\Translatable;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-/** @mixin Model */
+/**
+ * @mixin Model
+ *
+ * @phpstan-ignore trait.unused
+ */
 trait Linkable
 {
     abstract public function linkableConfig(): ?LinkableConfig;
