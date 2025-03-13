@@ -59,7 +59,7 @@ jobs:
             testbench: 8.*
             carbon: 2.*
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
       - uses: shivammathur/setup-php@v2
@@ -82,7 +82,9 @@ jobs:
           LARAVEL_NOVA_LICENSE_KEY: ${{ secrets.LARAVEL_NOVA_LICENSE_KEY }}
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "nesbot/carbon:${{ matrix.carbon }}" "orchestra/testbench:${{ matrix.testbench }}" "laravel/nova:${{ matrix.nova }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
       - name: Lint PHP code via Laravel Pint
         run: composer run-script test
