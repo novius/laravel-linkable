@@ -62,7 +62,7 @@ jobs:
           - laravel: 12.*
             nova: 4.*
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: test - P${{ matrix.php }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
       - uses: shivammathur/setup-php@v2
@@ -117,7 +117,7 @@ jobs:
           - laravel: 12.*
             nova: 4.*
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: phpstan - P${{ matrix.php }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
       - uses: shivammathur/setup-php@v2
