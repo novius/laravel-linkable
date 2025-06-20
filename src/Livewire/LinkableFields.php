@@ -130,6 +130,7 @@ class LinkableFields extends Component implements HasForms
                     Select::make('locale')
                         ->label('')
                         ->placeholder(trans('laravel-linkable::linkable.placeholder_locale'))
+                        ->hidden(fn () => LinkableFacade::hasRouteCallback() === false)
                         ->grow(false)
                         ->reactive(),
                 ]),
