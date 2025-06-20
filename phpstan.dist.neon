@@ -16,7 +16,3 @@ parameters:
     ignoreErrors:
         - identifier: phpDoc.parseError
         - identifier: varTag.unresolvableType
-#        - '#PHPDoc tag @var#'
-#
-#    excludePaths:
-#        - ./*/*/FileToBeExcluded.php

@@ -24,7 +24,7 @@ You can install the package via composer:
 composer require novius/laravel-linkable
 ```
 
-Optionally you can also: 
+Optionally, you can also: 
 
 ```bash
 php artisan vendor:publish --provider="Novius\LaravelLinkable\LaravelLinkableServiceProvider" --tag=config
@@ -33,7 +33,7 @@ php artisan vendor:publish --provider="Novius\LaravelLinkable\LaravelLinkableSer
 
 ## Usage
 
-#### Eloquent Model Trait
+### Eloquent Model Trait
 
 ```php
 namespace App\Models;
@@ -49,8 +49,18 @@ class Post extends Model {
     {
         if (! isset($this->linkableConfig)) {
             $this->linkableConfig = new LinkableModelConfig(
+                // To retrieve a instance url, you can define the getUrlCallback
+                getUrlCallback: function (Model $model, array $extraParameters = []) {
+                    return route('post_route', [
+                        ...$extraParameters,
+                        'post' => $model,
+                    ], true, $model->locale)  
+                },
+
+                // Or your can juste define the route name and the route name parameter
                 routeName: 'post_route',
                 routeParameterName: 'post',
+
                 optionLabel: 'title', // Required. A field of your model or a closure (taking the model instance as parameter) returning a label. Use to display a model instance in the Linkable Nova field
                 optionGroup: 'My model', // Required. The name of the group of the model in the Linkable Nova field
                 optionsQuery: function (Builder|Page $query) { // Optional. To modify the default query to populate the Linkable Nova field  
@@ -74,7 +84,7 @@ Now you can do that:
 
 ```php
 
-// In your routes file
+// In your route file, if you choose to work with `routeName` and `routeParameterName`
 Route::get('post/{post}', function (Post $post) {
     // ...
 })->name('post_route');
@@ -84,7 +94,7 @@ $post->url();
 $post->previewUrl();
 ```
 
-#### Nova
+### Nova
 
 If you use Laravel Nova, you can now use the Linkable field :
 
@@ -102,12 +112,49 @@ class MyResource extends Resource
         return [
             // ...
 
-            Linkable::make('Link', 'link'),
+            Linkable::make('Link', 'link')
+                ->linkableClasses([  // Optional: if you want to restrict link types 
+                    'route',
+                    OtherModel::class,                     
+                ]),
         ];
     }
 }
 
 ```
+
+### Filament
+
+If you use Laravel Filament, you can now use the Linkable field :
+
+```php
+<?php
+
+use Novius\LaravelLinkable\Filament\Forms\Components\Linkable;
+
+class MyResource extends Resource
+{
+    public static $model = \App\Models\MyResource::class;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                // ...
+    
+                Linkable::make('link')
+                    ->label('Link')
+                    ->linkableClasses([  // Optional: if you want to restrict link types 
+                        'route',
+                        OtherModel::class,                     
+                    ]),
+            ]);
+    }
+}
+
+```
+
+### Retrieving link
 
 Now you can do that:
 
@@ -125,7 +172,7 @@ return [
     // Laravel Linkable will autoload all Model using Linkable trait in this directory
     'autoload_models_in' => app_path('Models'),
 
-    // The guard name to preview model, without using the preview token
+    // The guard name to preview a model without using the preview token
     'guard_preview' => null,
 
     /*
@@ -142,20 +189,37 @@ return [
     ],
 
     /*
-     * If you want to add specifics models using the Linkable trait that are not in your autoload directory
+     * If you want to add specific models that use the linkable trait and that do not appear in your `autoload_models_in` directory
      */
-
     'linkable_models' => [
         Provider\Package\Models\Model::class,
     ],
-
-    /*
-     * Enable this if your site use multiple locales and Laravel Localization package
-     */
-    'use_localization' => false,
 ];
 ```
 
+If you want to customize the way Linkable generates URLs (by default the native `route()` method of Laravel), you can define your own method.
+Indispensable if you use a localization package for the routes.
+Add this in your ServiceProvider:
+
+```php
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Novius\LaravelLinkable\Facades\Linkable;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        $this->app->booted(function () {
+            Linkable::setRouteCallback(static function (string $name, array $parameters = [], ?string $locale = null) {
+                // This is an example of a package adding a `locale` to the route method
+                return route($name, $parameters, true, $locale);
+            });
+        });
+    }
+}
+```
 
 ### Testing
 

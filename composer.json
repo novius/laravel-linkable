@@ -26,6 +26,7 @@
         "laravel/framework": "^10.0 | ^11.0 | ^12.0"
     },
     "require-dev": {
+        "filament/filament": "^3.3.0",
         "larastan/larastan": "^2.0 | ^3.0",
         "laravel/nova": "^4.0 | ^5.0",
         "laravel/pint": "^1.7",
@@ -41,7 +42,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Novius\\LaravelLinkable\\Tests\\": "tests"
+            "Novius\\LaravelLinkable\\Tests\\": "tests",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "repositories": [
@@ -62,6 +66,18 @@
         ],
         "phpstan": [
             "./vendor/bin/phpstan analyse --memory-limit=2G"
+        ],
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
         ]
     },
     "config": {

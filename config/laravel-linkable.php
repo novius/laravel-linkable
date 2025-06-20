@@ -1,8 +1,10 @@
 <?php
 
 return [
+    // Laravel Linkable will autoload all Model using Linkable trait in this directory
     'autoload_models_in' => app_path('Models'),
 
+    // The guard name to preview a model without using the preview token
     'guard_preview' => null,
 
     /*
@@ -17,17 +19,9 @@ return [
     'linkable_routes' => [],
 
     /*
-     * Entities linkable by a menu item.
-     *
-     * Warning: The models listed below must use the trait \Novius\LaravelLinkable\Traits\Linkable.
+     * If you want to add specific models that use the linkable trait and that do not appear in your `autoload_models_in` directory
      */
-
     'linkable_models' => [
         // App\Models\Page::class,
     ],
-
-    /*
-     * Enable this if your site use multiple locales and Laravel Localization package
-     */
-    'use_localization' => false,
 ];

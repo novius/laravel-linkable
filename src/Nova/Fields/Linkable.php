@@ -2,12 +2,10 @@
 
 namespace Novius\LaravelLinkable\Nova\Fields;
 
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Nova\Fields\FormData;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Novius\LaravelLinkable\Facades\Linkable as LinkableFacade;
-use Novius\LaravelTranslatable\Traits\Translatable;
 
 class Linkable extends Select
 {
@@ -31,15 +29,15 @@ class Linkable extends Select
                 ]);
         };
 
-        if (config('laravel-linkable.use_localization', false)) {
+        if (LinkableFacade::hasRouteCallback()) {
             $novaRequest = app(NovaRequest::class);
             $model = $novaRequest->findResource()->model();
-            if ($model && in_array('Novius\LaravelTranslatable\Traits\Translatable', class_uses_recursive($model), true)) {
-                /** @var Model&Translatable $model */
+            $localeColumn = LinkableFacade::getModelLocaleColumn($model);
+            if ($localeColumn !== null) {
                 $this->dependsOn(
-                    [$model->getLocaleColumn()],
-                    function (Linkable $field, NovaRequest $request, FormData $formData) use ($optionCallback, $model) {
-                        $field->options($optionCallback($formData->string($model->getLocaleColumn())));
+                    [$localeColumn],
+                    function (Linkable $field, NovaRequest $request, FormData $formData) use ($localeColumn, $optionCallback) {
+                        $field->options($optionCallback($formData->string($localeColumn)));
                     }
                 );
             }
@@ -49,12 +47,12 @@ class Linkable extends Select
         $this->displayUsingLabels();
         $this->options(function () use ($optionCallback) {
             $locale = null;
-            if (config('laravel-linkable.use_localization', false)) {
+            if (LinkableFacade::hasRouteCallback()) {
                 $novaRequest = app(NovaRequest::class);
                 $model = $novaRequest->findResource()->resource;
-                if ($model && in_array('Novius\LaravelTranslatable\Traits\Translatable', class_uses_recursive($model), true)) {
-                    /** @var Model&Translatable $model */
-                    $locale = $model->{$model->getLocaleColumn()};
+                $localeColumn = LinkableFacade::getModelLocaleColumn($model);
+                if ($localeColumn !== null) {
+                    $locale = $model->{$localeColumn};
                 }
             }
 
