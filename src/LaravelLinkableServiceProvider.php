@@ -21,7 +21,7 @@ class LaravelLinkableServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'laravel-linkable');
         $this->publishes([__DIR__.'/../lang' => lang_path('vendor/laravel-linkable')], 'lang');
 
-        if ($this->app->runningUnitTests()) {
+        if ($this->app->runningUnitTests() && is_dir(__DIR__.'/../tests')) {
             Route::middleware(SubstituteBindings::class)->get('/model/{model}', [LinkableController::class, 'show']);
         }
 
