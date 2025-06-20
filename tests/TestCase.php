@@ -4,6 +4,7 @@ namespace Novius\LaravelLinkable\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
+use Livewire\LivewireServiceProvider;
 use Novius\LaravelLinkable\LaravelLinkableServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -25,6 +26,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
+            LivewireServiceProvider::class,
             LaravelLinkableServiceProvider::class,
         ];
     }
