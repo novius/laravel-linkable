@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use LaravelLang\Locales\Facades\Locales;
 use Livewire\Component;
 use Novius\LaravelLinkable\Facades\Linkable as LinkableFacade;
 use Novius\LaravelLinkable\Traits\Linkable;
@@ -130,7 +131,7 @@ class LinkableFields extends Component implements HasForms
                     Select::make('locale')
                         ->label('')
                         ->placeholder(trans('laravel-linkable::linkable.placeholder_locale'))
-                        ->hidden(fn () => LinkableFacade::hasRouteCallback() === false)
+                        ->hidden(Locales::installed()->count() < 2 || config('laravel-linkable.disable_localization'))
                         ->grow(false)
                         ->reactive(),
                 ]),

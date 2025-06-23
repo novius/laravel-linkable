@@ -5,6 +5,7 @@ namespace Novius\LaravelLinkable\Nova\Fields;
 use Laravel\Nova\Fields\FormData;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use LaravelLang\Locales\Facades\Locales;
 use Novius\LaravelLinkable\Facades\Linkable as LinkableFacade;
 
 class Linkable extends Select
@@ -29,7 +30,7 @@ class Linkable extends Select
                 ]);
         };
 
-        if (LinkableFacade::hasRouteCallback()) {
+        if (! config('laravel-linkable.disable_localization') && Locales::installed()->count() >= 2) {
             $novaRequest = app(NovaRequest::class);
             $model = $novaRequest->findResource()->model();
             $localeColumn = LinkableFacade::getModelLocaleColumn($model);
@@ -47,7 +48,7 @@ class Linkable extends Select
         $this->displayUsingLabels();
         $this->options(function () use ($optionCallback) {
             $locale = null;
-            if (LinkableFacade::hasRouteCallback()) {
+            if (! config('laravel-linkable.disable_localization') && Locales::installed()->count() >= 2) {
                 $novaRequest = app(NovaRequest::class);
                 $model = $novaRequest->findResource()->resource;
                 $localeColumn = LinkableFacade::getModelLocaleColumn($model);

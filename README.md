@@ -192,8 +192,11 @@ return [
      * If you want to add specific models that use the linkable trait and that do not appear in your `autoload_models_in` directory
      */
     'linkable_models' => [
-        Provider\Package\Models\Model::class,
+        \Provider\Package\Models\Model::class,
     ],
+
+    // Set to `true` if you don't want to use localization
+    'disable_localization' => false,
 ];
 ```
 

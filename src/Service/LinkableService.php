@@ -154,11 +154,6 @@ class LinkableService
         $this->routesCallback = $callback;
     }
 
-    public function hasRouteCallback(): bool
-    {
-        return $this->routesCallback !== null;
-    }
-
     public function route(string $name, array $parameters = [], ?string $locale = null): ?string
     {
         if ($this->routesCallback === null) {

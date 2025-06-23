@@ -24,4 +24,7 @@ return [
     'linkable_models' => [
         // App\Models\Page::class,
     ],
+
+    // Set to `true` if you don't want to use localization
+    'disable_localization' => false,
 ];

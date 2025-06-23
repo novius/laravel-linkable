@@ -15,7 +15,6 @@ use Novius\LaravelLinkable\Service\LinkableService;
  * @method static Collection links(array $classes = [], ?string $locale = null)
  * @method static string|null getLink(string $key)
  * @method static void setRouteCallback(Closure $callback)
- * @method static bool hasRouteCallback()
  * @method static string|null route(string $name, array $parameters = [], ?string $locale = null)
  * @method static string|null getModelLocaleColumn(Model|string $model):
  *
