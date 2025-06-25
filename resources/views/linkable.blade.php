@@ -8,6 +8,6 @@
     >
         <input x-model="state" type="hidden"/>
 
-        <livewire:laravel-linkable::linkable-fields :linkableClasses="$linkableClasses" :initState="$getState()"/>
+        <livewire:laravel-linkable::linkable-fields :linkableClasses="$getLinkableClasses()" :locale="$getLocale()" :initState="$getState()"/>
     </div>
 </x-dynamic-component>

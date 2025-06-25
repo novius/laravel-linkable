@@ -144,10 +144,11 @@ class MyResource extends Resource
     
                 Linkable::make('link')
                     ->label('Link')
-                    ->linkableClasses([  // Optional: if you want to restrict link types 
+                    ->setLinkableClasses([  // Optional: if you want to restrict link types 
                         'route',
                         OtherModel::class,                     
-                    ]),
+                    ])
+                    ->setLocale('fr'), // Optional: if you want to predefine locale
             ]);
     }
 }

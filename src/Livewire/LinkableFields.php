@@ -26,16 +26,23 @@ class LinkableFields extends Component implements HasForms
 
     public array $linkableClasses = [];
 
+    public ?string $locale = null;
+
     public ?string $initState = null;
 
     public ?array $data = [];
 
     public function mount(): void
     {
+        $this->data['locale'] = $this->locale;
         if ($this->initState !== null) {
             $infos = explode(':', $this->initState);
             if (count($infos) >= 2) {
-                $this->data = ['group' => $infos[0], 'item' => $infos[1], 'locale' => $infos[2] ?? null];
+                $this->data['group'] = $infos[0];
+                $this->data['item'] = $infos[1];
+                if (count($infos) >= 3) {
+                    $this->data['locale'] = $infos[2];
+                }
             }
         }
 
@@ -53,6 +60,15 @@ class LinkableFields extends Component implements HasForms
                         ->options(LinkableFacade::groups($this->linkableClasses))
                         ->grow(false)
                         ->reactive(),
+
+                    Select::make('locale')
+                        ->label('')
+                        ->placeholder(trans('laravel-linkable::linkable.placeholder_locale'))
+                        ->hidden(Locales::installed()->count() < 2 || config('laravel-linkable.disable_localization'))
+                        ->options(Locales::installed()->pluck('localized', 'code')->toArray())
+                        ->grow(false)
+                        ->reactive(),
+
                     Select::make('item')
                         ->label('')
                         ->placeholder(trans('laravel-linkable::linkable.placeholder_item'))
@@ -127,12 +143,6 @@ class LinkableFields extends Component implements HasForms
                             $item = implode(':', array_filter([$get('group'), $state, $get('locale')]));
                             $this->dispatch('linkable-selected', item: $item);
                         })
-                        ->reactive(),
-                    Select::make('locale')
-                        ->label('')
-                        ->placeholder(trans('laravel-linkable::linkable.placeholder_locale'))
-                        ->hidden(Locales::installed()->count() < 2 || config('laravel-linkable.disable_localization'))
-                        ->grow(false)
                         ->reactive(),
                 ]),
             ])
