@@ -57,9 +57,13 @@ class LinkableConfig
             $locale = $model->{$localeColumn};
         }
 
-        return Linkable::route($this->routeName, [
-            ...$extraParameters,
-            $this->routeParameterName => $model->{$model->getRouteKeyName()},
-        ], $locale);
+        if (Linkable::hasRoute($this->routeName, $locale)) {
+            return Linkable::route($this->routeName, [
+                ...$extraParameters,
+                $this->routeParameterName => $model->{$model->getRouteKeyName()},
+            ], $locale);
+        }
+
+        return null;
     }
 }

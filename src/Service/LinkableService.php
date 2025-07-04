@@ -21,6 +21,8 @@ class LinkableService
 
     protected ?Closure $routesCallback = null;
 
+    protected ?Closure $hasRouteCallback = null;
+
     /**
      * @throws ReflectionException
      */
@@ -162,6 +164,27 @@ class LinkableService
         }
 
         return call_user_func($this->routesCallback, $name, $parameters, $locale);
+    }
+
+    /**
+     * @param  Closure(string, ?string): ?string  $callback
+     */
+    public function setHasRouteCallback(Closure $callback): void
+    {
+        $this->hasRouteCallback = $callback;
+    }
+
+    public function hasRoute(string $name, ?string $locale = null): bool
+    {
+        if ($this->hasRouteCallback === null) {
+            if (method_exists(Route::class, 'hasLocalized')) {
+                return call_user_func([Route::class, 'hasLocalized'], $name, $locale);
+            }
+
+            return Route::has($name, $locale);
+        }
+
+        return call_user_func($this->routesCallback, $name, $locale);
     }
 
     public function getModelLocaleColumn(Model|string $model): ?string

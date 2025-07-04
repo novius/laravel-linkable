@@ -220,6 +220,10 @@ class AppServiceProvider extends ServiceProvider
                 // This is an example of a package adding a `locale` to the route method
                 return route($name, $parameters, true, $locale);
             });
+            Linkable::setHasRouteCallback(static function (string $name, ?string $locale = null) {
+                // This is an example of a package adding a `hasLocalized` method on Route facade
+                return Route::hasLocalized($name, $locale);
+            });
         });
     }
 }
