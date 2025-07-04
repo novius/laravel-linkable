@@ -184,7 +184,7 @@ class LinkableService
             return Route::has($name, $locale);
         }
 
-        return call_user_func($this->routesCallback, $name, $locale);
+        return call_user_func($this->hasRouteCallback, $name, $locale);
     }
 
     public function getModelLocaleColumn(Model|string $model): ?string
