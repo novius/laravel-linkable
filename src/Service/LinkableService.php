@@ -178,7 +178,7 @@ class LinkableService
     {
         if ($this->hasRouteCallback === null) {
             if (method_exists(Route::class, 'hasLocalized')) {
-                return call_user_func([Route::class, 'hasLocalized'], $name, $locale);
+                return call_user_func(Route::class.'::hasLocalized', $name, $locale);
             }
 
             return Route::has($name);
