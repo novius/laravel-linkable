@@ -181,7 +181,7 @@ class LinkableService
                 return call_user_func([Route::class, 'hasLocalized'], $name, $locale);
             }
 
-            return Route::has($name, $locale);
+            return Route::has($name);
         }
 
         return call_user_func($this->hasRouteCallback, $name, $locale);
