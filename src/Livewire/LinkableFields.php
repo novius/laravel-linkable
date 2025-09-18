@@ -3,11 +3,11 @@
 namespace Novius\LaravelLinkable\Livewire;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Split;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -18,7 +18,7 @@ use Novius\LaravelLinkable\Facades\Linkable as LinkableFacade;
 use Novius\LaravelLinkable\Traits\Linkable;
 
 /**
- * @property-read Form $form
+ * @property-read Schema $schema
  */
 class LinkableFields extends Component implements HasForms
 {
@@ -49,11 +49,11 @@ class LinkableFields extends Component implements HasForms
         $this->form->fill($this->data);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Split::make([
+                Grid::make([
                     Select::make('group')
                         ->label('')
                         ->placeholder(trans('laravel-linkable::linkable.placeholder_group'))
