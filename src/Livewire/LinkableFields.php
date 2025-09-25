@@ -5,6 +5,7 @@ namespace Novius\LaravelLinkable\Livewire;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Schemas\Components\Flex;
+use Filament\Schemas\Components\FusedGroup;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
@@ -53,12 +54,11 @@ class LinkableFields extends Component implements HasSchemas
     {
         return $schema
             ->components([
-                Flex::make([
+                FusedGroup::make([
                     Select::make('group')
                         ->label('')
                         ->placeholder(trans('laravel-linkable::linkable.placeholder_group'))
                         ->options(LinkableFacade::groups($this->linkableClasses))
-                        ->grow(false)
                         ->reactive(),
 
                     Select::make('locale')
@@ -66,7 +66,6 @@ class LinkableFields extends Component implements HasSchemas
                         ->placeholder(trans('laravel-linkable::linkable.placeholder_locale'))
                         ->hidden(Locales::installed()->count() < 2 || config('laravel-linkable.disable_localization'))
                         ->options(Locales::installed()->pluck('localized', 'code')->toArray())
-                        ->grow(false)
                         ->reactive(),
 
                     Select::make('item')
