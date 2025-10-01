@@ -4,7 +4,6 @@ namespace Novius\LaravelLinkable\Livewire;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Schemas\Components\Flex;
 use Filament\Schemas\Components\FusedGroup;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Contracts\HasSchemas;
