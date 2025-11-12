@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Novius\LaravelLinkable\Configs\LinkableConfig;
+use Novius\LaravelLinkable\Events\LinkableChanged;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -16,6 +17,15 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 trait Linkable
 {
+    public static function bootLinkable(): void
+    {
+        static::updated(static function (Model $model) {
+            if ($model->wasChanged($model->getRouteKeyName())) {
+                LinkableChanged::dispatch($model);
+            }
+        });
+    }
+
     abstract public function linkableConfig(): ?LinkableConfig;
 
     public function url(): ?string
