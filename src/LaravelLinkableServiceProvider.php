@@ -6,6 +6,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Livewire\LivewireManager;
 use Novius\LaravelLinkable\Livewire\LinkableFields;
 use Novius\LaravelLinkable\Service\LinkableService;
 use Novius\LaravelLinkable\Tests\Http\Controllers\LinkableController;
@@ -27,7 +28,7 @@ class LaravelLinkableServiceProvider extends ServiceProvider
 
         if (class_exists('Livewire\Livewire')) {
             /** @phpstan-ignore-next-line  */
-            if (method_exists(Livewire::class, 'addComponent')) {
+            if (method_exists(LivewireManager::class, 'addComponent')) {
                 Livewire::addComponent('laravel-linkable::linkable-fields', class: LinkableFields::class);
             } else {
                 Livewire::component('laravel-linkable::linkable-fields', LinkableFields::class);
