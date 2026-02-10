@@ -28,8 +28,12 @@ class LaravelLinkableServiceProvider extends ServiceProvider
 
         if (class_exists('Livewire\Livewire')) {
             /** @phpstan-ignore-next-line  */
-            if (method_exists(LivewireManager::class, 'addComponent')) {
-                Livewire::addComponent('laravel-linkable::linkable-fields', class: LinkableFields::class);
+            if (method_exists(LivewireManager::class, 'addNamespace')) {
+                Livewire::addNamespace(
+                    'laravel-linkable',
+                    classNamespace: 'Novius\\LaravelLinkable\\Livewire',
+                    classPath: __DIR__.'/Livewire'
+                );
             } else {
                 Livewire::component('laravel-linkable::linkable-fields', LinkableFields::class);
             }
