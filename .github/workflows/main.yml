@@ -45,7 +45,7 @@ jobs:
       matrix:
         operating-system: ['ubuntu-latest']
         php-versions: ['8.2', '8.3', '8.4', '8.5']
-        laravel: [ 11.*, 12.* ]
+        laravel: [ 10.*, 11.*, 12.* ]
         nova: [ 4.*, 5.* ]
         dependency-version: [ prefer-stable ]
         include:
@@ -55,11 +55,18 @@ jobs:
           - laravel: 11.*
             testbench: 9.*
             carbon: 2.*
+          - laravel: 10.*
+            testbench: 8.*
+            carbon: 2.*
         exclude:
           - laravel: 12.*
             nova: 4.*
+          - php-versions: '8.5'
+            laravel: 10.*
+          - php-versions: '8.5'
+            nova: 4.*
 
-    name: test - P${{ matrix.php }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: test - P${{ matrix.php-versions }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
       - uses: shivammathur/setup-php@v2
@@ -108,10 +115,14 @@ jobs:
             testbench: 9.*
             carbon: 2.*
         exclude:
-          - laravel: 12.*
+          - php-versions: 8.5
+            laravel: 12.*
+            nova: 4.*
+          - php-versions: 8.5
+            laravel: 11.*
             nova: 4.*
 
-    name: phpstan - P${{ matrix.php }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: phpstan - P${{ matrix.php-versions }} - L${{ matrix.laravel }} - N${{ matrix.nova }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
       - uses: shivammathur/setup-php@v2
