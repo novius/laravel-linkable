@@ -1,7 +1,7 @@
 /vendor
 composer.lock
 auth.json
-.phpunit.result.cache
+.phpunit.cache
 
 # IDE Stuff
 /.fleet
