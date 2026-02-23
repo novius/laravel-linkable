@@ -175,9 +175,9 @@ class LinkableService
             $className = $infos[0];
 
             if (in_array(Linkable::class, class_uses_recursive($className), true)) {
-                /** @var Model&Linkable|null $item */
                 $item = $className::find($infos[1]);
                 if ($item !== null) {
+                    /** @var Model&Linkable $item */
                     $config = $item->linkableConfig();
                     if ($config !== null) {
                         $label = is_callable($config->optionLabel) ? call_user_func($config->optionLabel, $item) : $item->{$config->optionLabel};
