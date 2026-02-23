@@ -3,6 +3,7 @@
 namespace Novius\LaravelLinkable\Service;
 
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -48,7 +49,7 @@ class LinkableService
         $this->routes = $this->routes->merge($routes);
     }
 
-    public function links(array $classes = [], ?string $locale = null): Collection
+    public function links(array $classes = [], ?string $locale = null, ?string $search = null): Collection
     {
         $links = collect();
         foreach ($this->models as $class) {
@@ -65,6 +66,13 @@ class LinkableService
                 $query = $config->optionsQuery ? call_user_func($config->optionsQuery, $model::query()) : $model::query();
                 if ($locale !== null && LinkableFacade::getModelLocaleColumn(__CLASS__) !== null) {
                     $query->withLocale($locale);
+                }
+                if ($search !== null) {
+                    $query->where(function (Builder $query) use ($search, $config) {
+                        foreach ($config->optionSearch as $column) {
+                            $query->orWhere($column, 'like', "%{$search}%");
+                        }
+                    });
                 }
 
                 $links = $links->merge(
@@ -142,6 +150,46 @@ class LinkableService
 
                 /** @phpstan-ignore method.notFound */
                 return $item?->url();
+            }
+        }
+
+        return null;
+    }
+
+    public function getLinkOption(string $key): ?array
+    {
+        $infos = explode(':', $key);
+        if ($infos[0] === 'route') {
+            if (Route::has($infos[1])) {
+                $translation = $this->routes[$infos[1]];
+
+                return [
+                    'id' => $infos[1],
+                    'type' => 'route',
+                    'group' => trans('laravel-linkable::linkable.route_group'),
+                    'label' => trans($translation),
+                ];
+            }
+        } elseif (count($infos) === 2) {
+            /** @var class-string<Model> $className */
+            $className = $infos[0];
+
+            if (in_array(Linkable::class, class_uses_recursive($className), true)) {
+                /** @var Model&Linkable|null $item */
+                $item = $className::find($infos[1]);
+                if ($item !== null) {
+                    $config = $item->linkableConfig();
+                    if ($config !== null) {
+                        $label = is_callable($config->optionLabel) ? call_user_func($config->optionLabel, $item) : $item->{$config->optionLabel};
+
+                        return [
+                            'id' => $item->{$item->getKeyName()},
+                            'type' => get_class($item),
+                            'group' => $config->optionGroup,
+                            'label' => $label,
+                        ];
+                    }
+                }
             }
         }
 
