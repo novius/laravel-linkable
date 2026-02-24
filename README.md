@@ -38,45 +38,44 @@ php artisan vendor:publish --provider="Novius\LaravelLinkable\LaravelLinkableSer
 ```php
 namespace App\Models;
 
-use \Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Novius\LaravelLinkable\Configs\LinkableConfig;
 use Novius\LaravelLinkable\Traits\Linkable;
 
 class Post extends Model {
     use Linkable;
     ...
 
-    public function getLinkableConfig(): LinkableModelConfig
+    public function linkableConfig(): LinkableConfig
     {
-        if (! isset($this->linkableConfig)) {
-            $this->linkableConfig = new LinkableModelConfig(
-                // To retrieve a instance url, you can define the getUrlCallback
-                getUrlCallback: function (Model $model, array $extraParameters = []) {
-                    return route('post_route', [
-                        ...$extraParameters,
-                        'post' => $model,
-                    ], true, $model->locale)  
-                },
+        return new LinkableConfig(
+            // To retrieve an instance url, you can define the getUrlCallback
+            getUrlCallback: function (Model $model, array $extraParameters = []) {
+                return route('post_route', [
+                    ...$extraParameters,
+                    'post' => $model,
+                ], true, $model->locale);
+            },
 
-                // Or your can juste define the route name and the route name parameter
-                routeName: 'post_route',
-                routeParameterName: 'post',
+            // Or you can just define the route name and the route name parameter
+            routeName: 'post_route',
+            routeParameterName: 'post',
 
-                optionLabel: 'title', // Required. A field of your model or a closure (taking the model instance as parameter) returning a label. Use to display a model instance in the Linkable Nova field
-                optionGroup: 'My model', // Required. The name of the group of the model in the Linkable Nova field
-                optionsQuery: function (Builder|Page $query) { // Optional. To modify the default query to populate the Linkable Nova field  
-                    $query->published();
-                },
-                resolveQuery: function (Builder|Page $query) { // Optional. The base query to resolve the model binding
-                    $query->where('locale', app()->currentLocale());
-                },
-                resolveNotPreviewQuery: function (Builder|Page $query) { // Optional. The query to resolve the model binding when not in preview mode
-                    $query->published();
-                },
-                previewTokenField: 'preview_token' // Optional. The field that contains the preview token of the model 
-            );
-        }
-
-        return $this->linkableConfig;
+            optionLabel: 'title', // Required. A field of your model or a closure (taking the model instance as parameter) returning a label. Use to display a model instance in the Linkable Nova/Filament field
+            optionGroup: 'My model', // Required. The name of the group of the model in the Linkable Nova/Filament field
+            optionSearch: ['title', 'slug'], // Optional. The columns used for searching in the Linkable Nova/Filament field. Default to optionLabel if it is a string.
+            optionsQuery: function (Builder $query) { // Optional. To modify the default query to populate the Linkable Nova/Filament field
+                $query->published();
+            },
+            resolveQuery: function (Builder $query) { // Optional. The base query to resolve the model binding
+                $query->where('locale', app()->getLocale());
+            },
+            resolveNotPreviewQuery: function (Builder $query) { // Optional. The query to resolve the model binding when not in preview mode
+                $query->published();
+            },
+            previewTokenField: 'preview_token' // Optional. The field that contains the preview token of the model
+        );
     }
 ```
 
@@ -113,7 +112,7 @@ class MyResource extends Resource
             // ...
 
             Linkable::make('Link', 'link')
-                ->linkableClasses([  // Optional: if you want to restrict link types 
+                ->optionsClasses([  // Optional: if you want to restrict link types 
                     'route',
                     OtherModel::class,                     
                 ]),
