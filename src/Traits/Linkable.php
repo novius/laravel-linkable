@@ -77,7 +77,7 @@ trait Linkable
         /** @var Model|Builder $query */
         $query = $this->newQuery();
         if ($this->linkableConfig()->resolveQuery) {
-            call_user_func($this->linkableConfig()->resolveQuery, $query);
+            $this->linkableConfig()->resolveQuery->call($this, $query);
         }
 
         if (! empty($guard) && Auth::guard($guard)->check()) {
@@ -92,7 +92,7 @@ trait Linkable
 
         $queryNotPreview = $query->clone();
         if ($this->linkableConfig()->resolveNotPreviewQuery) {
-            call_user_func($this->linkableConfig()->resolveNotPreviewQuery, $queryNotPreview);
+            $this->linkableConfig()->resolveNotPreviewQuery->call($this, $queryNotPreview);
         }
 
         return $this->resolveRouteBindingQuery($queryNotPreview, $value, $field)->first();

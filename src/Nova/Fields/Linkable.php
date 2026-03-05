@@ -54,6 +54,8 @@ class Linkable extends Select
                 $localeColumn = LinkableFacade::getModelLocaleColumn($model);
                 if ($localeColumn !== null) {
                     $locale = $model->{$localeColumn};
+                } else {
+                    $locale = LinkableFacade::getModelLocale($model);
                 }
             }
 

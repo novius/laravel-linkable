@@ -93,9 +93,8 @@ class LinkableFields extends Component implements HasSchemas
                                 return [];
                             }
 
-                            $query = $config->optionsQuery ? call_user_func($config->optionsQuery,
-                                $model::query()) : $model::query();
-                            if ($locale !== null && LinkableFacade::getModelLocaleColumn(__CLASS__) !== null) {
+                            $query = $config->optionsQuery ? $config->optionsQuery->call($model, $model::query()) : $model::query();
+                            if ($locale !== null && LinkableFacade::getModelLocaleColumn($model) !== null) {
                                 $query->withLocale($locale);
                             }
                             $query->where(function (Builder $query) use ($search, $config) {

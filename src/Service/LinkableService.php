@@ -63,7 +63,7 @@ class LinkableService
                     continue;
                 }
 
-                $query = $config->optionsQuery ? call_user_func($config->optionsQuery, $model::query()) : $model::query();
+                $query = $config->optionsQuery ? $config->optionsQuery->call($model, $model::query()) : $model::query();
                 if ($locale !== null && LinkableFacade::getModelLocaleColumn(__CLASS__) !== null) {
                     $query->withLocale($locale);
                 }
@@ -247,6 +247,20 @@ class LinkableService
             if (method_exists($model, 'getLocaleColumn')) {
                 return $model->getLocaleColumn();
             }
+        }
+
+        return null;
+    }
+
+    public function getModelLocale(Model|string $model): ?string
+    {
+        $locale_column = $this->getModelLocaleColumn($model);
+        if ($locale_column !== null) {
+            return $model->{$locale_column};
+        }
+
+        if (method_exists($model, 'getLocale')) {
+            return $model->getLocale();
         }
 
         return null;
