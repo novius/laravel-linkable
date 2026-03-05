@@ -119,7 +119,18 @@ class MyResource extends Resource
         ];
     }
 }
+```
 
+If you want that the Linkable field use locale but your model does not use it directly, you can define a getLocale method in your model:
+
+```php
+class MyModel extends \Illuminate\Database\Eloquent\Model
+{
+    public function getLocale()
+    {
+        return $this->parentRelation?->locale;
+    }
+}
 ```
 
 ### Filament
