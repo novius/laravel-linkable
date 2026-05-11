@@ -24,7 +24,7 @@
     "require": {
         "php": ">=8.2",
         "laravel-lang/locales": "^2.10",
-        "laravel/framework": "^10.0 | ^11.0 | ^12.0"
+        "laravel/framework": "^10.0 | ^11.0 | ^12.0 | ^13.0"
     },
     "require-dev": {
         "filament/filament": "^4.0.17 | ^5.0",
@@ -33,7 +33,7 @@
         "laravel/pint": "^1.7",
         "mcamara/laravel-localization": "^2.2",
         "novius/laravel-translatable": "^1.0 | ^2.0",
-        "orchestra/testbench": "^9.0 | ^10.0",
+        "orchestra/testbench": "^9.0 | ^10.0 | ^11.0",
         "pestphp/pest": "^2.34.9 | ^v3.7.4"
     },
     "autoload": {
