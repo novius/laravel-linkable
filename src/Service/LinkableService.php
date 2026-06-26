@@ -225,7 +225,7 @@ class LinkableService
     public function hasRoute(string $name, ?string $locale = null): bool
     {
         if ($this->hasRouteCallback === null) {
-            if (method_exists(Route::class, 'hasLocalized')) {
+            if (Route::hasMacro('hasLocalized')) {
                 return call_user_func(Route::class.'::hasLocalized', $name, $locale);
             }
 
