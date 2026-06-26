@@ -33,7 +33,7 @@ class LinkableConfig
         if ($getUrlCallback === null && $this->routeName === null) {
             throw new RuntimeException('You must set a route name or a closure to get the url');
         }
-        if ($getUrlCallback === null && $this->routeName !== null && $this->routeParameterName === null) {
+        if ($getUrlCallback === null && $this->routeParameterName === null) {
             throw new RuntimeException('You must set a route parameter name if you set a route name');
         }
         $this->optionSearch = $optionSearch ?? [];
