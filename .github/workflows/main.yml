@@ -109,7 +109,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ['8.2', '8.3', '8.4', '8.5']
-        laravel: [ 11.*, 12.*, 13.* ]
+        laravel: [ 12.*, 13.* ]
         nova: [ 4.*, 5.* ]
         include:
           - laravel: 13.*
@@ -118,9 +118,6 @@ jobs:
           - laravel: 12.*
             carbon: 3.*
             testbench: 10.*
-          - laravel: 11.*
-            carbon: 2.*
-            testbench: 9.*
         exclude:
           - laravel: 13.*
             nova: 4.*
